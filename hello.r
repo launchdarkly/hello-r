@@ -7,7 +7,7 @@ FEATURE_FLAG_KEY="YOUR_FEATURE_KEY"
 
 ldclient <- import("ldclient")
 
-ldclient$set_sdk_key(SDK_KEY)
+ldclient$set_config(ldclient$config$Config(SDK_KEY))
 
 user = list(key = "alice@example.com")
 
