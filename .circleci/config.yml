@@ -4,7 +4,8 @@ workflows:
   version: 2
   build_all:
     jobs:
-      - linux
+      - linux:
+          context: hello-world-demos
 
   test-daily:
     triggers:
@@ -14,8 +15,8 @@ workflows:
           branches:
             only: main
     jobs:
-      - linux
-
+      - linux:
+          context: hello-world-demos
 jobs:
   linux:
     docker:
@@ -34,5 +35,12 @@ jobs:
             pip3 install launchdarkly-server-sdk
             R -e "install.packages('reticulate')"
       - run:
+          name: Insert key and flag data into demo
+          command: |
+            sed -i "s/YOUR_SDK_KEY/${LD_HELLO_WORLD_SDK_KEY}/" hello.r
+            sed -i "s/YOUR_FEATURE_KEY/${LD_HELLO_WORLD_FLAG_KEY_WITH_TRUE_VALUE}/" hello.r
+      - run:
           name: Run Demo
-          command: Rscript hello.r
+          command: |
+              Rscript hello.r | tee output.txt
+              grep -q "is true for this user" output.txt || (echo "Flag did not evaluate to expected true value" && exit 1)
