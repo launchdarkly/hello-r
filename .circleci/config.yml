@@ -43,4 +43,4 @@ jobs:
           name: Run Demo
           command: |
               Rscript hello.r | tee output.txt
-              grep -q "feature is launched" output.txt || (echo "Flag did not evaluate to expected true value" && exit 1)
+              grep -q "is true for this user" output.txt || (echo "Flag did not evaluate to expected true value" && exit 1)
