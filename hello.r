@@ -14,9 +14,9 @@ ldclient$set_config(ldclient$config$Config(SDK_KEY))
 user = list(key = "example-user-key", name="Sandy")
 
 if (ldclient$get()$variation(FEATURE_FLAG_KEY, user, FALSE)) {
-    print("Feature flag %s is true for this user", FEATURE_FLAG_KEY)
+    cat("Feature flag", FEATURE_FLAG_KEY, "is true for this user")
 } else {
-    print("Feature flag %s is false for this user", FEATURE_FLAG_KEY)
+    cat("Feature flag", FEATURE_FLAG_KEY, "is false for this user")
 }
 
 # Here we ensure that the SDK shuts down cleanly and has a chance to deliver analytics
