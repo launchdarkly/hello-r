@@ -9,6 +9,13 @@ ldclient <- import("ldclient")
 
 ldclient$set_config(ldclient$config$Config(SDK_KEY))
 
+if (ldclient$get()$is_initialized()) {
+  cat("SDK successfully initialized!")
+} else {
+  cat("SDK failed to initialize")
+  exit()
+}
+
 # Set up the user properties. This user should appear on your LaunchDarkly
 # users dashboard soon after you run the demo.
 user = list(key = "example-user-key", name="Sandy")
