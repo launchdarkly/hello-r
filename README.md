@@ -1,5 +1,5 @@
-# LaunchDarkly Sample R Server-Side Application
-We've built a simple console application that demonstrates how LaunchDarkly's SDK works. Below, you'll find the basic build procedure. While LaunchDarkly does not have a dedicated R SDK, you can use the Python SDK. Use this as a starting point for integrating the `python-server-sdk` with your R application. To learn more, read the [Python SDK reference guide](https://docs.launchdarkly.com/sdk/server-side/python).
+# LaunchDarkly sample R Server-Side Application
+We've built a console application that demonstrates how LaunchDarkly's SDK works. Below, you'll find the basic build procedure. While LaunchDarkly does not have a dedicated R SDK, you can use the Python SDK. Use this as a starting point for integrating the `python-server-sdk` with your R application. To learn more, read the [Python SDK reference guide](https://docs.launchdarkly.com/sdk/server-side/python).
 
 ## Dependencies
 1. Install the reticulate package: `R -e "install.packages('reticulate')"`
