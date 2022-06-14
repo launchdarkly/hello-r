@@ -38,7 +38,7 @@ jobs:
           name: Insert key and flag data into demo
           command: |
             sed -i "/^SDK_KEY=/c SDK_KEY=\"${LD_HELLO_WORLD_SDK_KEY}\"/" hello.r
-            sed -i "s/my-boolean-flag/${LD_HELLO_WORLD_FLAG_KEY_WITH_TRUE_VALUE}/" hello.r
+            sed -i "/^FEATURE_FLAG_KEY=/c FEATURE_FLAG_KEY=\"${LD_HELLO_WORLD_FLAG_KEY_WITH_TRUE_VALUE}\"/" hello.r
       - run:
           name: Run Demo
           command: |
