@@ -1,0 +1,41 @@
+name: Build and run
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 9 * * *'
+  push:
+    branches: [ main, 'feat/**' ]
+    paths-ignore:
+      - '**.md' # Do not need to run CI for markdown changes.
+  pull_request:
+    branches: [ main, 'feat/**' ]
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write # Needed if using OIDC to get release secrets.
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+
+      - uses: r-lib/actions/setup-r@v2
+
+      - name: Install dependencies
+        run: |
+          R -e 'install.packages("reticulate")'
+          pip install launchdarkly-server-sdk
+
+      - uses: launchdarkly/gh-actions/actions/verify-hello-app@verify-hello-app-v2.0.0
+        with:
+          use_server_key: true
+          role_arn: ${{ vars.AWS_ROLE_ARN }}
+          command: Rscript main.r
