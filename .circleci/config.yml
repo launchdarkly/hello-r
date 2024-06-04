@@ -20,27 +20,22 @@ workflows:
 jobs:
   linux:
     docker:
-      - image: ubuntu:18.04
+      - image: cimg/base:2024.06
     steps:
       - checkout
       - run:
           name: Setup Dependencies
           command: |
-            apt-get update -y
-            DEBIAN_FRONTEND="noninteractive" apt-get install -y gnupg2 software-properties-common tzdata python3 python3-pip
-            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-            add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
-            apt-get update -y
-            apt-get install -y r-base
-            pip3 install launchdarkly-server-sdk
-            R -e "install.packages('reticulate')"
-      - run:
-          name: Insert key and flag data into demo
-          command: |
-            sed -i "s/SDK_KEY=*\".*\"/SDK_KEY=\"${LD_HELLO_WORLD_SDK_KEY}\"/" hello.r
-            sed -i "s/FEATURE_FLAG_KEY=*\".*\"/FEATURE_FLAG_KEY=\"${LD_HELLO_WORLD_FLAG_KEY_WITH_TRUE_VALUE}\"/" hello.r
+            sudo apt-get update -y
+            sudo apt-get install -y gnupg2 software-properties-common tzdata pip r-base
+            pip install launchdarkly-server-sdk
+            sudo R -e "install.packages('reticulate')"
+
       - run:
           name: Run Demo
           command: |
-              Rscript hello.r | tee output.txt
-              grep -q "is true for this user" output.txt || (echo "Flag did not evaluate to expected true value" && exit 1)
+            export LAUNCHDARKLY_SDK_KEY=${LD_HELLO_WORLD_SDK_KEY}
+            export LAUNCHDARKLY_FLAG_KEY=${LD_HELLO_WORLD_FLAG_KEY_WITH_TRUE_VALUE}
+
+            Rscript main.r | tee output.txt
+            grep -q "feature flag evaluates to true" output.txt || (echo "Flag did not evaluate to expected true value" && exit 1)
