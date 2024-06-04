@@ -20,9 +20,9 @@ if (ldclient$get()$is_initialized()) {
 context = ldclient$context$ContextBuilder("example-user-key")$kind("user")$name("Sandy")$build()
 
 if (ldclient$get()$variation(FEATURE_FLAG_KEY, context, FALSE)) {
-    cat("The ", FEATURE_FLAG_KEY, " feature flag evaluates to true.\n")
+    cat("The", FEATURE_FLAG_KEY, "feature flag evaluates to true.\n")
 } else {
-    cat("The ", FEATURE_FLAG_KEY, " feature flag evaluates to false\n")
+    cat("The", FEATURE_FLAG_KEY, "feature flag evaluates to false\n")
 }
 
 # Here we ensure that the SDK shuts down cleanly and has a chance to deliver analytics
