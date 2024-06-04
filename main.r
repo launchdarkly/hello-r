@@ -1,29 +1,28 @@
 library(reticulate)
 
 # Set SDK_KEY to your LaunchDarkly SDK key
-SDK_KEY=""
+SDK_KEY <- Sys.getenv("LAUNCHDARKLY_SDK_KEY")
+
 # Set FEATURE_FLAG_KEY to the feature flag key you want to evaluate
-FEATURE_FLAG_KEY="my-boolean-flag"
+FEATURE_FLAG_KEY <- Sys.getenv("LAUNCHDARKLY_FLAG_KEY", "sample-feature")
 
 ldclient <- import("ldclient")
 
 ldclient$set_config(ldclient$config$Config(SDK_KEY))
 
 if (ldclient$get()$is_initialized()) {
-  cat("SDK successfully initialized!")
+  cat("SDK successfully initialized!\n")
 } else {
-  cat("SDK failed to initialize")
+  cat("SDK failed to initialize\n")
   exit()
 }
 
-# Set up the user properties. This user should appear on your LaunchDarkly
-# users dashboard soon after you run the demo.
-user = list(key = "example-user-key", name="Sandy")
+context = ldclient$context$ContextBuilder("example-user-key")$kind("user")$name("Sandy")$build()
 
-if (ldclient$get()$variation(FEATURE_FLAG_KEY, user, FALSE)) {
-    cat("Feature flag", FEATURE_FLAG_KEY, "is true for this user")
+if (ldclient$get()$variation(FEATURE_FLAG_KEY, context, FALSE)) {
+    cat("The ", FEATURE_FLAG_KEY, " feature flag evaluates to true.\n")
 } else {
-    cat("Feature flag", FEATURE_FLAG_KEY, "is false for this user")
+    cat("The ", FEATURE_FLAG_KEY, " feature flag evaluates to false\n")
 }
 
 # Here we ensure that the SDK shuts down cleanly and has a chance to deliver analytics
