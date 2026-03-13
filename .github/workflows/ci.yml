@@ -19,20 +19,29 @@ jobs:
     permissions:
       id-token: write # Needed if using OIDC to get release secrets.
 
+    env:
+      RETICULATE_PYTHON: ${{ github.workspace }}/.venv/bin/python
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
       - uses: r-lib/actions/setup-r@929c772977a3a13c8733b363bf5a2f685c25dd91
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpng-dev
+
       - name: Install dependencies
         run: |
           R -e 'install.packages("reticulate")'
-          pip install launchdarkly-server-sdk
+          python -m venv .venv
+          .venv/bin/pip install launchdarkly-server-sdk
 
       - uses: launchdarkly/gh-actions/actions/verify-hello-app@verify-hello-app-v2.0.0
         with:
