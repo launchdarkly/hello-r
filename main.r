@@ -59,5 +59,8 @@ if (CI == "") {
     change_listener <- ldclient$get()$flag_tracker$add_flag_value_change_listener(
         FEATURE_FLAG_KEY, context, flag_change_listener)
 
-    threading$Event()$wait()
+    wait_event <- threading$Event()
+    repeat {
+        wait_event$wait(1)
+    }
 }
